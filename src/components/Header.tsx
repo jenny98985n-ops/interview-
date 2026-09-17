@@ -59,7 +59,7 @@ export const Header: React.FC<HeaderProps> = ({
                 Packaging Design Expert Interview Bank
               </h1>
               <p className="text-xs sm:text-sm text-stone-300 mt-0.5">
-                Structural Packaging Engineer (結構包裝工程師) 核心面試題庫、STAR 解題思維與高情商攻防手冊
+                Structural Packaging Engineer
               </p>
             </div>
           </div>
