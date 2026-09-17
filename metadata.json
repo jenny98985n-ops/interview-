@@ -1,0 +1,6 @@
+{
+  "name": "Packaging Design Expert Interview Bank",
+  "description": "Comprehensive interview preparation system for Structural Packaging Engineers at Stanley Black & Decker, covering ISTA/SolidWorks packaging design, AI rendering workflows, reverse-interview questions, salary negotiation strategies, and JD alignment.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
