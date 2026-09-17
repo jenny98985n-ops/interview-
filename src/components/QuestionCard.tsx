@@ -510,38 +510,80 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
                 <div className="border border-stone-200 rounded-xl overflow-hidden bg-white shadow-xs">
                   <div className="bg-stone-100/90 px-4 py-3 border-b border-stone-200 flex items-center justify-between">
                     <div className="flex items-center space-x-2">
-                      <span className="text-emerald-800 font-bold text-xs sm:text-sm">✅ ISTA 測試失敗實例分析庫</span>
-                      <span className="text-xs text-stone-500 font-medium">（現象 ➔ 原因 ➔ 思考方向 ➔ 解法）</span>
+                      <span className="text-emerald-800 font-bold text-sm sm:text-base flex items-center space-x-1.5">
+                        <span>✅</span>
+                        <span>ISTA 測試失敗實例</span>
+                      </span>
                     </div>
                   </div>
                   <div className="overflow-x-auto">
-                    <table className="w-full text-left text-xs sm:text-sm border-collapse">
+                    <table className="w-full text-left text-xs sm:text-sm border-collapse min-w-[760px]">
                       <thead className="bg-stone-50 text-stone-800 font-bold border-b border-stone-200">
                         <tr>
-                          <th className="p-3 whitespace-nowrap">測試項目</th>
-                          <th className="p-3 min-w-[120px]">現象</th>
-                          <th className="p-3 min-w-[180px]">原因</th>
-                          <th className="p-3 min-w-[180px]">思考方向 / 關鍵因素</th>
-                          <th className="p-3 min-w-[220px]">解法與實戰對策</th>
+                          <th className="p-3 whitespace-nowrap bg-stone-50/80 w-[140px]">測試項目</th>
+                          <th className="p-3 min-w-[140px]">現象</th>
+                          <th className="p-3 min-w-[200px]">原因</th>
+                          <th className="p-3 min-w-[180px]">思考方向/關鍵因素</th>
+                          <th className="p-3 min-w-[240px]">解法</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-stone-200">
                         {question.failureCases.map((fc, idx) => (
                           <tr key={idx} className="hover:bg-stone-50/60 transition-colors align-top">
-                            <td className="p-3 font-semibold text-stone-900 whitespace-nowrap bg-stone-50/40">
-                              {fc.testType}
+                            <td className="p-3 font-semibold text-stone-900 bg-stone-50/40">
+                              <div className="font-bold text-stone-900">{fc.testType.split("\n")[0]}</div>
+                              {fc.testType.split("\n")[1] && (
+                                <div className="text-xs text-stone-500 font-normal mt-0.5">{fc.testType.split("\n")[1]}</div>
+                              )}
                             </td>
-                            <td className="p-3 text-rose-700 font-medium whitespace-pre-line leading-relaxed">
+                            <td className="p-3 text-stone-900 font-medium whitespace-pre-line leading-relaxed">
                               {fc.phenomenon}
                             </td>
-                            <td className="p-3 text-stone-800 whitespace-pre-line leading-relaxed">
-                              {fc.cause}
+                            <td className="p-3 text-stone-800 leading-relaxed">
+                              <div className="space-y-2">
+                                {fc.cause.split("\n\n").map((part, pIdx) => (
+                                  <p key={pIdx} className="whitespace-pre-line">{part}</p>
+                                ))}
+                              </div>
                             </td>
-                            <td className="p-3 text-stone-700 whitespace-pre-line leading-relaxed">
-                              {fc.thinking}
+                            <td className="p-3 text-stone-700 leading-relaxed">
+                              {fc.thinking ? (
+                                <div className="space-y-2">
+                                  {fc.thinking.split("\n\n").map((part, pIdx) => (
+                                    <p key={pIdx} className="whitespace-pre-line">{part}</p>
+                                  ))}
+                                </div>
+                              ) : (
+                                <span className="text-stone-300">-</span>
+                              )}
                             </td>
-                            <td className="p-3 text-emerald-900 font-medium whitespace-pre-line leading-relaxed">
-                              {fc.solution}
+                            <td className="p-3 text-stone-800 leading-relaxed">
+                              <div className="space-y-2">
+                                {fc.solution.split("\n\n").map((part, pIdx) => {
+                                  if (part.includes("▶ 是失敗經驗，也是成功經驗")) {
+                                    return (
+                                      <div key={pIdx} className="pt-1">
+                                        <span className="inline-flex items-center space-x-1 bg-blue-50 text-blue-700 font-bold px-2 py-1 rounded text-xs border border-blue-200">
+                                          <span>▶</span>
+                                          <span>是失敗經驗，也是成功經驗</span>
+                                        </span>
+                                      </div>
+                                    );
+                                  }
+                                  return (
+                                    <p
+                                      key={pIdx}
+                                      className="whitespace-pre-line text-stone-800"
+                                      dangerouslySetInnerHTML={{
+                                        __html: part.replace(
+                                          /固定卡扣/g,
+                                          '<u class="font-bold underline decoration-stone-800 decoration-2">固定卡扣</u>'
+                                        ),
+                                      }}
+                                    />
+                                  );
+                                })}
+                              </div>
                             </td>
                           </tr>
                         ))}
