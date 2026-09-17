@@ -67,6 +67,8 @@ export interface QuestionItem {
   actualCase?: string;            // 實際案例 ※
   answerKeyPoint?: string;        // 小重點 / 專業知識暗藏
   operatingPrinciples?: string[]; // 操作原則
+  memoryHook?: string;            // 30秒背誦口訣 / 記憶核心詞
+  keyTakeaways?: string[];        // 列點核心記憶要點 (快速背誦)
 }
 
 export interface UserPracticeState {

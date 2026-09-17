@@ -28,7 +28,10 @@ import {
   Users,
   Compass,
   Briefcase,
-  Quote
+  Quote,
+  Zap,
+  BookOpen,
+  ListOrdered
 } from "lucide-react";
 
 interface QuestionCardProps {
@@ -47,6 +50,7 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
   const [activeSubTab, setActiveSubTab] = useState<
     "strategy" | "star" | "answer" | "pitfalls" | "notes" | "ai" | "generator"
   >("answer");
+  const [memorizeMode, setMemorizeMode] = useState<"bullet" | "full">("bullet");
   const [copied, setCopied] = useState(false);
   const [isPlayingAudio, setIsPlayingAudio] = useState(false);
   const [userDraft, setUserDraft] = useState(practiceState.notes || "");
@@ -54,6 +58,108 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
   const [aiResult, setAiResult] = useState<AICritiqueResult | null>(null);
   const [aiError, setAiError] = useState<string | null>(null);
   const [isCardExpanded, setIsCardExpanded] = useState(true);
+
+  // Helper to extract key takeaways for easy memorization
+  const getKeyTakeaways = (q: QuestionItem): string[] => {
+    if (q.keyTakeaways && q.keyTakeaways.length > 0) {
+      return q.keyTakeaways;
+    }
+    const derived: string[] = [];
+    if (q.coreStrategy) {
+      const parts = q.coreStrategy.split(/➔|->/).map((s) => s.trim()).filter(Boolean);
+      if (parts.length > 1) {
+        parts.forEach((p) => {
+          const cleaned = p.replace(/^[【\[]/, "").replace(/[】\]]$/, "");
+          if (cleaned.length > 5) derived.push(cleaned);
+        });
+      }
+    }
+    if (derived.length === 0) {
+      if (q.answerKeyPoint) derived.push(`【答題關鍵】${q.answerKeyPoint}`);
+      if (q.star?.action) derived.push(`【關鍵行動】${q.star.action}`);
+      if (q.star?.result) derived.push(`【量化成果】${q.star.result}`);
+    }
+    return derived.slice(0, 4);
+  };
+
+  // Structured text renderer for bullets, numbers, and headers
+  const renderFormattedContent = (content: string) => {
+    if (!content) return null;
+    const lines = content.split("\n");
+    return (
+      <div className="space-y-2 text-stone-900 leading-relaxed font-sans">
+        {lines.map((line, idx) => {
+          const trimmed = line.trim();
+          if (!trimmed) {
+            return <div key={idx} className="h-1.5" />;
+          }
+          // Section header: e.g. 【...】 or 一、...
+          if (/^【.+】/.test(trimmed) || /^[一二三四五六七八九十]、/.test(trimmed)) {
+            return (
+              <div key={idx} className="mt-3 mb-1 font-bold text-stone-950 text-sm sm:text-base flex items-center space-x-2">
+                <span className="w-1.5 h-4 bg-amber-500 rounded-full inline-block shrink-0"></span>
+                <span>{trimmed}</span>
+              </div>
+            );
+          }
+          // Numbered step / point: e.g. "1. ", "Step 1", "步驟 1"
+          const numMatch = trimmed.match(/^(\d+\.|\bStep\s*\d+[:：]?|\b步驟\s*\d+[:：]?)\s*(.*)/i);
+          if (numMatch) {
+            return (
+              <div key={idx} className="flex items-start space-x-2.5 my-1.5 pl-0.5">
+                <span className="shrink-0 text-xs font-bold bg-amber-100 text-amber-900 border border-amber-300/80 px-2 py-0.5 rounded-md mt-0.5 shadow-2xs">
+                  {numMatch[1].replace(/[.：:]$/, "")}
+                </span>
+                <span className="text-sm sm:text-base text-stone-900 leading-relaxed font-medium">
+                  {numMatch[2]}
+                </span>
+              </div>
+            );
+          }
+          // Bullet point: •, ▸, ◦, ・, -, ✦, ①②③
+          const bulletMatch = trimmed.match(/^([•▸◦・\-✦①②③④⑤⑥⑦⑧⑨⑩])\s*(.*)/);
+          if (bulletMatch) {
+            const bullet = bulletMatch[1];
+            const isCircle = /[①②③④⑤⑥⑦⑧⑨⑩]/.test(bullet);
+            return (
+              <div key={idx} className="flex items-start space-x-2.5 my-1 pl-2 sm:pl-3">
+                <span className={`shrink-0 mt-1 font-bold ${isCircle ? "text-amber-700 text-sm" : "text-amber-600 text-xs"}`}>
+                  {isCircle ? bullet : "▸"}
+                </span>
+                <span className="text-sm sm:text-base text-stone-800 leading-relaxed">
+                  {bulletMatch[2]}
+                </span>
+              </div>
+            );
+          }
+          // Highlight callouts: ✅, 🚨, 💡
+          if (/^[✅🚨💡]/.test(trimmed)) {
+            const icon = trimmed.slice(0, 2);
+            const text = trimmed.slice(2).trim();
+            const isSuccess = icon.includes("✅");
+            return (
+              <div
+                key={idx}
+                className={`rounded-lg p-2.5 px-3 text-xs sm:text-sm my-2 font-medium flex items-start space-x-2 border ${
+                  isSuccess
+                    ? "bg-emerald-50/80 border-emerald-200 text-emerald-950"
+                    : "bg-amber-50/90 border-amber-200 text-stone-900"
+                }`}
+              >
+                <span className="shrink-0 mt-0.5 text-base">{icon}</span>
+                <span className="leading-relaxed">{text}</span>
+              </div>
+            );
+          }
+          return (
+            <p key={idx} className="text-sm sm:text-base text-stone-800 leading-relaxed">
+              {trimmed}
+            </p>
+          );
+        })}
+      </div>
+    );
+  };
 
   // Copy expert answer to clipboard
   const handleCopyAnswer = () => {
@@ -459,89 +565,223 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
                 </div>
               )}
 
-              <div className="flex justify-between items-center">
-                <span className="text-xs sm:text-sm font-bold text-stone-600 uppercase tracking-wider">
-                  專家擬答實戰逐字稿 (含工程名詞與商業量化)
-                </span>
-                <button
-                  id={`copy-btn-${question.id}`}
-                  onClick={handleCopyAnswer}
-                  className="inline-flex items-center space-x-1 text-xs sm:text-sm font-medium text-stone-700 hover:text-stone-950 bg-stone-100 hover:bg-stone-200 px-3 py-1.5 rounded-lg border border-stone-200 transition-colors"
-                >
-                  {copied ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
-                  <span>{copied ? "已複製擬答" : "複製擬答"}</span>
-                </button>
+              {/* Mode Toggle Bar: 📋 條列速記背誦模式 vs 📖 完整擬答逐字稿 */}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-stone-100/90 p-2.5 sm:p-3 rounded-xl border border-stone-200">
+                <div className="flex items-center space-x-2">
+                  <span className="text-xs font-bold text-stone-600 tracking-wider">
+                    檢視模式：
+                  </span>
+                  <div className="inline-flex rounded-lg bg-stone-200/80 p-1">
+                    <button
+                      onClick={() => setMemorizeMode("bullet")}
+                      className={`px-3 py-1.5 rounded-md text-xs font-bold flex items-center space-x-1.5 transition-all ${
+                        memorizeMode === "bullet"
+                          ? "bg-amber-400 text-stone-950 shadow-xs"
+                          : "text-stone-700 hover:text-stone-950"
+                      }`}
+                    >
+                      <Zap className="w-3.5 h-3.5 text-stone-950" />
+                      <span>條列速記模式 (易背)</span>
+                    </button>
+                    <button
+                      onClick={() => setMemorizeMode("full")}
+                      className={`px-3 py-1.5 rounded-md text-xs font-bold flex items-center space-x-1.5 transition-all ${
+                        memorizeMode === "full"
+                          ? "bg-amber-400 text-stone-950 shadow-xs"
+                          : "text-stone-700 hover:text-stone-950"
+                      }`}
+                    >
+                      <BookOpen className="w-3.5 h-3.5 text-stone-950" />
+                      <span>完整擬答逐字稿</span>
+                    </button>
+                  </div>
+                </div>
+
+                <div className="flex items-center space-x-2 self-end sm:self-auto">
+                  <button
+                    id={`copy-btn-${question.id}`}
+                    onClick={handleCopyAnswer}
+                    className="inline-flex items-center space-x-1 text-xs font-medium text-stone-700 hover:text-stone-950 bg-white hover:bg-stone-50 px-3 py-1.5 rounded-lg border border-stone-200 shadow-2xs transition-colors"
+                  >
+                    {copied ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
+                    <span>{copied ? "已複製擬答" : "複製擬答"}</span>
+                  </button>
+                </div>
               </div>
 
-              <div className="bg-stone-50 text-stone-900 p-5 sm:p-6 rounded-xl text-base sm:text-[17px] leading-relaxed md:leading-loose whitespace-pre-line font-sans border border-stone-200 shadow-xs">
-                {question.expertAnswer}
+              {/* ⚡ 30秒背誦口訣 (Memory Hook Banner) - Always rendered for quick retention! */}
+              <div className="bg-gradient-to-r from-amber-500/10 via-amber-400/15 to-orange-500/10 border-2 border-amber-400/80 rounded-xl p-4 sm:p-5 shadow-xs space-y-2">
+                <div className="flex items-center space-x-2 text-amber-950 font-black text-sm sm:text-base">
+                  <span className="p-1 rounded bg-amber-400 text-stone-950 shadow-2xs">
+                    <Zap className="w-4 h-4 fill-stone-950" />
+                  </span>
+                  <span>【30秒背誦口訣 & 核心記憶點】</span>
+                </div>
+                <div className="text-stone-950 text-base sm:text-lg font-bold leading-snug pl-1">
+                  {question.memoryHook ||
+                    "【一核心、雙重驗證、數據定錨】打樣驗證可行性，量產考量公差與節拍，以真實測試數據為依歸。"}
+                </div>
               </div>
 
-              {/* Operating Principles if present */}
-              {question.operatingPrinciples && question.operatingPrinciples.length > 0 && (
-                <div className="bg-blue-50/70 border border-blue-200 rounded-xl p-4 sm:p-5 space-y-2.5">
-                  <div className="flex items-center space-x-2 text-blue-950 font-bold text-sm sm:text-base">
-                    <Compass className="w-4 h-4 text-blue-700" />
-                    <span>操作原則 (Operating Principles)</span>
-                  </div>
-                  <ul className="space-y-1.5 pl-1">
-                    {question.operatingPrinciples.map((principle, pIdx) => (
-                      <li key={pIdx} className="text-sm sm:text-base text-blue-950 flex items-start space-x-2">
-                        <span className="text-blue-600 font-bold mt-0.5">•</span>
-                        <span className="leading-relaxed">{principle}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
+              {/* MODE 1: BULLET / MEMORIZATION VIEW */}
+              {memorizeMode === "bullet" && (
+                <div className="space-y-4">
+                  {/* Key Takeaways Cards */}
+                  <div className="bg-white border border-stone-200 rounded-xl p-4 sm:p-5 space-y-3 shadow-xs">
+                    <div className="flex items-center justify-between border-b border-stone-100 pb-2.5">
+                      <div className="flex items-center space-x-2 text-stone-950 font-bold text-sm sm:text-base">
+                        <ListOrdered className="w-4 h-4 text-amber-600" />
+                        <span>核心要點條列（背誦清單）</span>
+                      </div>
+                      <span className="text-xs text-stone-500 font-medium">按序記憶，面試口試不卡詞</span>
+                    </div>
 
-              {/* Answer Key Point if present */}
-              {question.answerKeyPoint && (
-                <div className="bg-emerald-50/70 border border-emerald-200 rounded-xl p-3.5 sm:p-4 flex items-start space-x-2.5">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600 mt-0.5 shrink-0" />
-                  <div className="text-sm sm:text-base text-emerald-950 font-medium leading-relaxed">
-                    <span className="font-bold text-emerald-900">答題小重點：</span>
-                    {question.answerKeyPoint}
-                  </div>
-                </div>
-              )}
-
-              {/* Notes Remark if present */}
-              {question.notesRemark && question.notesRemark.trim().length > 0 && (
-                <div className="bg-amber-50/50 border border-amber-200/80 rounded-xl p-3.5 sm:p-4 flex items-start space-x-2.5">
-                  <Lightbulb className="w-4 h-4 text-amber-600 mt-0.5 shrink-0" />
-                  <div className="text-sm sm:text-base text-amber-950 leading-relaxed">
-                    <span className="font-bold text-amber-900">備註重點：</span>
-                    {question.notesRemark}
-                  </div>
-                </div>
-              )}
-
-              {/* Case Study / Real Project Context if present */}
-              {question.caseStudy && (
-                <div className="bg-amber-50/60 border border-amber-200 rounded-xl p-4 sm:p-5 space-y-2">
-                  <div className="flex items-center space-x-2 text-amber-950 font-bold text-sm sm:text-base">
-                    <span className="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
-                    <span>真實專案實例 (Real Case Context)</span>
-                  </div>
-                  <div className="text-sm sm:text-base text-stone-800 leading-relaxed whitespace-pre-line font-sans">
-                    {question.caseStudy}
-                  </div>
-                </div>
-              )}
-
-              {/* Spoken Draft / Oral Version */}
-              {question.spokenDraft && (
-                <div className="bg-white border border-stone-200 rounded-xl p-4 sm:p-5 space-y-2 shadow-xs">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-2 text-stone-900 font-bold text-sm sm:text-base">
-                      <span className="px-2 py-0.5 rounded bg-stone-100 text-stone-800 text-xs font-mono">口語化實戰範例</span>
-                      <span className="text-stone-500 text-xs font-normal">面試現場自然發音表達</span>
+                    <div className="grid grid-cols-1 gap-2.5">
+                      {getKeyTakeaways(question).map((takeaway, tIdx) => (
+                        <div
+                          key={tIdx}
+                          className="flex items-start space-x-3 p-3 rounded-lg bg-stone-50 border border-stone-200/70 hover:border-amber-300 transition-colors"
+                        >
+                          <span className="shrink-0 w-6 h-6 rounded-md bg-stone-900 text-amber-300 font-black text-xs flex items-center justify-center font-mono mt-0.5 shadow-2xs">
+                            {String(tIdx + 1).padStart(2, "0")}
+                          </span>
+                          <span className="text-sm sm:text-[15px] font-medium text-stone-900 leading-relaxed">
+                            {takeaway}
+                          </span>
+                        </div>
+                      ))}
                     </div>
                   </div>
-                  <div className="text-sm sm:text-base text-stone-800 leading-relaxed whitespace-pre-line bg-stone-50/80 p-4 rounded-lg border border-stone-200">
-                    {question.spokenDraft}
+
+                  {/* Operating Principles if present */}
+                  {question.operatingPrinciples && question.operatingPrinciples.length > 0 && (
+                    <div className="bg-blue-50/70 border border-blue-200 rounded-xl p-4 sm:p-5 space-y-2.5">
+                      <div className="flex items-center space-x-2 text-blue-950 font-bold text-sm sm:text-base">
+                        <Compass className="w-4 h-4 text-blue-700" />
+                        <span>操作原則 (Operating Principles)</span>
+                      </div>
+                      <ul className="space-y-1.5 pl-1">
+                        {question.operatingPrinciples.map((principle, pIdx) => (
+                          <li key={pIdx} className="text-sm sm:text-base text-blue-950 flex items-start space-x-2">
+                            <span className="text-blue-600 font-bold mt-0.5">•</span>
+                            <span className="leading-relaxed">{principle}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
+                  {/* Answer Key Point if present */}
+                  {question.answerKeyPoint && (
+                    <div className="bg-emerald-50/70 border border-emerald-200 rounded-xl p-3.5 sm:p-4 flex items-start space-x-2.5">
+                      <CheckCircle2 className="w-4 h-4 text-emerald-600 mt-0.5 shrink-0" />
+                      <div className="text-sm sm:text-base text-emerald-950 font-medium leading-relaxed">
+                        <span className="font-bold text-emerald-900">答題小重點：</span>
+                        {question.answerKeyPoint}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Real Case Study / Context if present (Structured View) */}
+                  {(question.actualCase || question.caseStudy) && (
+                    <div className="bg-amber-50/60 border border-amber-300/80 rounded-xl p-4 sm:p-5 space-y-3">
+                      <div className="flex items-center space-x-2 text-amber-950 font-bold text-sm sm:text-base">
+                        <span className="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
+                        <span>真實專案實例拆解 (Real Case Breakdown)</span>
+                      </div>
+                      <div className="text-sm sm:text-base text-stone-900 leading-relaxed font-sans">
+                        {renderFormattedContent(question.actualCase || question.caseStudy || "")}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Button to toggle to full text */}
+                  <div className="pt-1 flex justify-center">
+                    <button
+                      onClick={() => setMemorizeMode("full")}
+                      className="inline-flex items-center space-x-2 text-xs sm:text-sm font-bold text-stone-800 hover:text-stone-950 bg-stone-100 hover:bg-stone-200 px-4 py-2 rounded-lg border border-stone-200 transition-colors"
+                    >
+                      <BookOpen className="w-4 h-4 text-amber-600" />
+                      <span>切換至「完整擬答逐字稿」檢視說法細節</span>
+                    </button>
                   </div>
+                </div>
+              )}
+
+              {/* MODE 2: FULL TRANSCRIPT VIEW */}
+              {memorizeMode === "full" && (
+                <div className="space-y-4">
+                  <div className="bg-stone-50 text-stone-900 p-5 sm:p-6 rounded-xl text-base sm:text-[17px] leading-relaxed md:leading-loose font-sans border border-stone-200 shadow-xs">
+                    {renderFormattedContent(question.expertAnswer)}
+                  </div>
+
+                  {/* Operating Principles if present */}
+                  {question.operatingPrinciples && question.operatingPrinciples.length > 0 && (
+                    <div className="bg-blue-50/70 border border-blue-200 rounded-xl p-4 sm:p-5 space-y-2.5">
+                      <div className="flex items-center space-x-2 text-blue-950 font-bold text-sm sm:text-base">
+                        <Compass className="w-4 h-4 text-blue-700" />
+                        <span>操作原則 (Operating Principles)</span>
+                      </div>
+                      <ul className="space-y-1.5 pl-1">
+                        {question.operatingPrinciples.map((principle, pIdx) => (
+                          <li key={pIdx} className="text-sm sm:text-base text-blue-950 flex items-start space-x-2">
+                            <span className="text-blue-600 font-bold mt-0.5">•</span>
+                            <span className="leading-relaxed">{principle}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
+                  {/* Answer Key Point if present */}
+                  {question.answerKeyPoint && (
+                    <div className="bg-emerald-50/70 border border-emerald-200 rounded-xl p-3.5 sm:p-4 flex items-start space-x-2.5">
+                      <CheckCircle2 className="w-4 h-4 text-emerald-600 mt-0.5 shrink-0" />
+                      <div className="text-sm sm:text-base text-emerald-950 font-medium leading-relaxed">
+                        <span className="font-bold text-emerald-900">答題小重點：</span>
+                        {question.answerKeyPoint}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Notes Remark if present */}
+                  {question.notesRemark && question.notesRemark.trim().length > 0 && (
+                    <div className="bg-amber-50/50 border border-amber-200/80 rounded-xl p-3.5 sm:p-4 flex items-start space-x-2.5">
+                      <Lightbulb className="w-4 h-4 text-amber-600 mt-0.5 shrink-0" />
+                      <div className="text-sm sm:text-base text-amber-950 leading-relaxed">
+                        <span className="font-bold text-amber-900">備註重點：</span>
+                        {question.notesRemark}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Case Study / Real Project Context if present */}
+                  {(question.actualCase || question.caseStudy) && (
+                    <div className="bg-amber-50/60 border border-amber-200 rounded-xl p-4 sm:p-5 space-y-2">
+                      <div className="flex items-center space-x-2 text-amber-950 font-bold text-sm sm:text-base">
+                        <span className="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
+                        <span>真實專案實例 (Real Case Context)</span>
+                      </div>
+                      <div className="text-sm sm:text-base text-stone-900 leading-relaxed font-sans">
+                        {renderFormattedContent(question.actualCase || question.caseStudy || "")}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Spoken Draft / Oral Version */}
+                  {question.spokenDraft && (
+                    <div className="bg-white border border-stone-200 rounded-xl p-4 sm:p-5 space-y-2 shadow-xs">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center space-x-2 text-stone-900 font-bold text-sm sm:text-base">
+                          <span className="px-2 py-0.5 rounded bg-stone-100 text-stone-800 text-xs font-mono">口語化實戰範例</span>
+                          <span className="text-stone-500 text-xs font-normal">面試現場自然發音表達</span>
+                        </div>
+                      </div>
+                      <div className="text-sm sm:text-base text-stone-800 leading-relaxed whitespace-pre-line bg-stone-50/80 p-4 rounded-lg border border-stone-200">
+                        {question.spokenDraft}
+                      </div>
+                    </div>
+                  )}
                 </div>
               )}
 
