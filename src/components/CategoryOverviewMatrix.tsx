@@ -175,8 +175,8 @@ export const CategoryOverviewMatrix: React.FC<CategoryOverviewMatrixProps> = ({
         bar: "bg-amber-400",
         text: "text-amber-950",
       },
-      summary: "生成式 AI 白底材質渲染軟體鏈（Vizcom / ControlNet）、DEWALT 黃色與企業 CI 色彩一致性控制。",
-      keyTopics: ["ControlNet 深度約束", "CAD 線框骨架渲染", "Vizcom 快速白模", "DEWALT Pantone 1235C", "Delta E < 1.5"],
+      summary: "生成式 AI 白底材質渲染軟體鏈（Vizcom / ControlNet）、CAD 線框骨架約束與前期提案效率倍增。",
+      keyTopics: ["ControlNet 深度約束", "CAD 線框骨架渲染", "Vizcom 快速白模", "材質 LoRA 反射", "提案時間縮減 70%"],
     },
   ];
 

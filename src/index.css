@@ -1,1 +1,30 @@
 @import "tailwindcss";
+
+@layer base {
+  html {
+    font-size: 16px;
+    line-height: 1.65;
+    letter-spacing: 0.01em;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  html.font-scale-standard {
+    font-size: 16px;
+  }
+
+  html.font-scale-large {
+    font-size: 17.5px;
+  }
+
+  html.font-scale-xlarge {
+    font-size: 19px;
+  }
+
+  body {
+    font-family: "Noto Sans TC", "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
+    color: #1c1917; /* stone-900 */
+    background-color: #fafaf9; /* stone-50 */
+    text-rendering: optimizeLegibility;
+  }
+}
