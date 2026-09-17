@@ -477,6 +477,46 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
                 {question.expertAnswer}
               </div>
 
+              {/* Operating Principles if present */}
+              {question.operatingPrinciples && question.operatingPrinciples.length > 0 && (
+                <div className="bg-blue-50/70 border border-blue-200 rounded-xl p-4 sm:p-5 space-y-2.5">
+                  <div className="flex items-center space-x-2 text-blue-950 font-bold text-sm sm:text-base">
+                    <Compass className="w-4 h-4 text-blue-700" />
+                    <span>操作原則 (Operating Principles)</span>
+                  </div>
+                  <ul className="space-y-1.5 pl-1">
+                    {question.operatingPrinciples.map((principle, pIdx) => (
+                      <li key={pIdx} className="text-sm sm:text-base text-blue-950 flex items-start space-x-2">
+                        <span className="text-blue-600 font-bold mt-0.5">•</span>
+                        <span className="leading-relaxed">{principle}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {/* Answer Key Point if present */}
+              {question.answerKeyPoint && (
+                <div className="bg-emerald-50/70 border border-emerald-200 rounded-xl p-3.5 sm:p-4 flex items-start space-x-2.5">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600 mt-0.5 shrink-0" />
+                  <div className="text-sm sm:text-base text-emerald-950 font-medium leading-relaxed">
+                    <span className="font-bold text-emerald-900">答題小重點：</span>
+                    {question.answerKeyPoint}
+                  </div>
+                </div>
+              )}
+
+              {/* Notes Remark if present */}
+              {question.notesRemark && question.notesRemark.trim().length > 0 && (
+                <div className="bg-amber-50/50 border border-amber-200/80 rounded-xl p-3.5 sm:p-4 flex items-start space-x-2.5">
+                  <Lightbulb className="w-4 h-4 text-amber-600 mt-0.5 shrink-0" />
+                  <div className="text-sm sm:text-base text-amber-950 leading-relaxed">
+                    <span className="font-bold text-amber-900">備註重點：</span>
+                    {question.notesRemark}
+                  </div>
+                </div>
+              )}
+
               {/* Case Study / Real Project Context if present */}
               {question.caseStudy && (
                 <div className="bg-amber-50/60 border border-amber-200 rounded-xl p-4 sm:p-5 space-y-2">

@@ -63,6 +63,10 @@ export interface QuestionItem {
   tableSections?: QuestionTableSection[];
   caseStudy?: string;
   spokenDraft?: string;
+  notesRemark?: string;           // 備註 ※
+  actualCase?: string;            // 實際案例 ※
+  answerKeyPoint?: string;        // 小重點 / 專業知識暗藏
+  operatingPrinciples?: string[]; // 操作原則
 }
 
 export interface UserPracticeState {

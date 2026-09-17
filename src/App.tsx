@@ -74,6 +74,9 @@ export default function App() {
     const matchSearch =
       q.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       q.expertAnswer.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (q.actualCase && q.actualCase.toLowerCase().includes(searchQuery.toLowerCase())) ||
+      (q.notesRemark && q.notesRemark.toLowerCase().includes(searchQuery.toLowerCase())) ||
+      (q.caseStudy && q.caseStudy.toLowerCase().includes(searchQuery.toLowerCase())) ||
       q.tags.some((t) => t.toLowerCase().includes(searchQuery.toLowerCase())) ||
       q.keyTerms.some((k) => k.toLowerCase().includes(searchQuery.toLowerCase()));
 
