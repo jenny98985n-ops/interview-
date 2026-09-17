@@ -10,6 +10,7 @@ import { MockInterviewLab } from "./components/MockInterviewLab";
 import { ExitScenarioGenerator } from "./components/ExitScenarioGenerator";
 import { ReverseInterviewStudio } from "./components/ReverseInterviewStudio";
 import { CategoryOverviewMatrix } from "./components/CategoryOverviewMatrix";
+import { AmandaProfilePortfolio } from "./components/AmandaProfilePortfolio";
 import { QUESTIONS_DATA, COMPANY_INFO } from "./data/interviewData";
 import { QuestionCategory, UserPracticeState } from "./types";
 import {
@@ -109,6 +110,9 @@ export default function App() {
 
       {/* Main Container */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 flex-1 w-full">
+        {/* VIEW 0: Amanda's Profile & Portfolio Specification */}
+        {activeTab === "profile" && <AmandaProfilePortfolio />}
+
         {/* VIEW 1: Questions Bank */}
         {activeTab === "questions" && (
           <div className="space-y-6">

@@ -28,13 +28,14 @@ export const Header: React.FC<HeaderProps> = ({
   }, [fontScale]);
 
   const tabs = [
+    { id: "profile", label: "設計美學與個人履歷", icon: Award, badge: "Amanda" },
     { id: "questions", label: "面試實戰題庫", icon: BookOpen, count: totalQuestions },
     { id: "standards", label: "ASTM / ISTA 差異對照", icon: FlaskConical, badge: "1A/2A/3A" },
     { id: "ask-company", label: "詢問公司的問題", icon: MessageSquareQuote, badge: "反向提問" },
     { id: "mock", label: "模擬面試演練", icon: Mic, badge: "AI點評" },
     { id: "salary", label: "薪資談判精算", icon: Calculator, badge: "63K實拿" },
     { id: "jd", label: "JD 痛點精準破解", icon: Target, badge: "四大攻防" },
-    { id: "self-intro", label: "1分鐘自介中英對照", icon: Award },
+    { id: "self-intro", label: "1分鐘自介中英對照", icon: Layers },
     { id: "glossary", label: "包裝工程術語庫", icon: Layers },
   ];
 
