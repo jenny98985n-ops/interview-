@@ -23,7 +23,12 @@ import {
   TrendingUp,
   FileText,
   Share2,
-  Briefcase
+  Briefcase,
+  Leaf,
+  Cpu,
+  Globe,
+  Target,
+  Layers
 } from "lucide-react";
 
 interface ReverseInterviewStudioProps {
@@ -32,6 +37,77 @@ interface ReverseInterviewStudioProps {
 
 const STORAGE_KEY = "stanley_custom_reverse_questions_v1";
 const NOTES_STORAGE_KEY = "stanley_reverse_notes_v1";
+
+export const STANLEY_STRATEGY_DIMENSIONS = [
+  {
+    key: "sustainability",
+    num: "一",
+    badge: "🌿 永續與全紙化戰略",
+    title: "一、 永續與全紙化戰略",
+    subtitle: "展現專業法規與材質視野",
+    icon: Leaf,
+    color: "emerald",
+    signalSent: "展現你不僅懂紙結構設計，還高度關注國際永續法規（PPWR）與重型產品無塑化的實務挑戰。",
+    targetAudience: "用人主管 (Packaging Lead / Director)",
+    recommendedTiming: "面試尾聲反向提問第一順位，或討論到歐美客戶法規與包材選型時",
+    question: "「針對史丹利七和旗下的重型手工具或電動工具，目前在推行『全紙化/無塑包裝』以及因應歐洲 PPWR 法規時，團隊遇到的最大結構防護或成本挑戰是什麼？公司未來 1-2 年的核心減塑目標為何？」",
+    english: "Regarding Stanley Black & Decker's heavy hand tools and power tool lines, what are the primary structural protection or cost hurdles the team encounters when driving all-paper/plastic-free initiatives and adapting to the EU PPWR regulations? What are the company's core reduction targets over the next 1-2 years?",
+    followUpPitch: "「這正是我深耕全紙化的最大動力！在重型金屬件防護上，我主導的『無膠環保結構專利』正是利用幾何自鎖與局部瓦楞垂直抗壓通過 ISTA 1A 落摔測試，並嚴格遵循 PPWR 空隙率 ≤50% 與 DfR 可回收門檻。若能加入，我能立即將這套兼顧極限防摔與合規的經驗帶入團隊。」",
+    pitfalls: "避免只談空泛的口號式環保，務必將問題錨定在重型五金的防摔抗震、防鏽防潮、空隙率與模具成本等工程現實。",
+    questionId: "rev-stanley-1-sustainability-ppwr"
+  },
+  {
+    key: "digital_tools",
+    num: "二",
+    badge: "🤖 團隊工作流與數位工具應用",
+    title: "二、 團隊工作流與數位工具應用",
+    subtitle: "呼應個人亮點與設備優勢",
+    icon: Cpu,
+    color: "sky",
+    signalSent: "精準連結史丹利七和的硬體優勢與你的 AI/資料庫整合能力，凸顯你追求效率與數位化轉型的工程思維。",
+    targetAudience: "用人主管 (Packaging Lead / Manager)",
+    recommendedTiming: "面試尾聲反向提問，或主管提及內部設計、打樣與審圖流程時",
+    question: "「了解到公司具備完整的軟硬體資源（如 ArtiosCAD、樣板割樣機），且對新技術抱持開放態度，想請教目前團隊在進行打樣驗證與提案時，AI 或自動化工具在整體設計流程中的應用情況為何？團隊是否也有計畫建立模組化的包裝結構資料庫？」",
+    english: "Knowing that Stanley possesses comprehensive hardware and software infrastructure—such as ArtiosCAD and sample cutting tables—and embraces technological innovation, how are AI or automated tools currently utilized across the team's prototyping, verification, and design proposals? Does the team also have plans to establish a modular packaging structural database?",
+    followUpPitch: "「這與我的日常研發流程不謀而合！在現職我除了利用 CAD 建模，也導入生成式 AI 輔助白底與材質快速渲染，大幅縮短概念提案週期；同時我也主導建置了跨部門『無塑包裝資料庫』賦能業務迅速報價。若加入史丹利，我非常期待能結合現場割樣機與 ArtiosCAD 2D/3D 串聯，進一步加速結構迭代驗證！」",
+    pitfalls: "避免給人「依賴 AI 取代工程基本功」的印象，強調 AI 是提高渲染與報價效率的輔助工具，核心仍是扎實的結構幾何力學與割樣機實體驗證。",
+    questionId: "rev-stanley-2-tools-ai-database"
+  },
+  {
+    key: "collaboration",
+    num: "三",
+    badge: "🌏 跨國/跨部門協作與專案主導權",
+    title: "三、 跨國/跨部門協作與專案主導權",
+    subtitle: "展現商業思維與組織溝通",
+    icon: Globe,
+    color: "indigo",
+    signalSent: "展現你具備外商跨國協作的視野，且重視專案源頭（RFQ）的成本與結構規劃，而不只是一個接單做圖的設計師。",
+    targetAudience: "用人主管 / 處長 (Director / Lead)",
+    recommendedTiming: "討論到專案管理經驗、跨部門協作，或面試尾聲主管提問時",
+    question: "「想了解台灣的包裝設計團隊在專案初期（如 RFQ 報價與結構規劃階段）與全球 R&D、產品經理（PM）以及亞洲供應商的協作模式為何？台灣團隊主要主導哪些產品線或區域市場的開發？」",
+    english: "Could you share how the Taiwan packaging engineering team collaborates during early project stages—such as RFQ quoting and upfront structural planning—with global R&D, Product Managers, and Asian suppliers? Which specific product lines or global regional markets does the Taiwan team primarily lead?",
+    followUpPitch: "「非常清晰！過去我經常在 RFQ 初期就深入參與結構評估與模具成本推估，並建立標準化資料庫協助業務即時報價，具備強烈的前端成本意識。在跨國溝通上，我也習慣用精確工程圖面、公差標準與數據說話，能迅速與歐美 PM 及亞洲包材廠建立信任合作。」",
+    pitfalls: "保持求教與探索心態，語氣要真誠，避免讓人誤會你在挑揀產品線或抱怨跨國溝通繁瑣。",
+    questionId: "rev-stanley-3-cross-border-rfq-ownership"
+  },
+  {
+    key: "role_expectations",
+    num: "四",
+    badge: "🎯 職位期待與短期落地目標",
+    title: "四、 職位期待與短期落地目標",
+    subtitle: "展現強烈即戰力與積極度",
+    icon: Target,
+    color: "amber",
+    signalSent: "展現結果導向（Result-oriented）的態度，讓面試官想像你入職後快速產生貢獻與價值的畫面。",
+    targetAudience: "用人主管 (Hiring Manager)",
+    recommendedTiming: "面試結束前的黃金壓軸提問，能為整個面試劃下完美有力的句點",
+    question: "「如果我有幸加入團隊，您期待這位包裝設計師在入職前 3 到 6 個月內，優先協助團隊解決的核心痛點或推動的重點專案是什麼？公司如何定義這個職位的成功？」",
+    english: "If I am fortunate enough to join the team, what core pain point or priority project would you expect this packaging designer to resolve within the first 3 to 6 months? How does the leadership team define success for this role?",
+    followUpPitch: "「非常感謝主管明確點出這個痛點！這正是我渴望發揮價值的地方。無論是新專案要攻堅全紙化落下防護、加速割樣驗證週期，或是推進包材規格標準化，我都會以此為第一目標排定前 90 天里程碑，以最快速度無縫銜接產出成果。」",
+    pitfalls: "聽完主管回答後千萬不要發呆只說『好』，務必立刻連結自己過往的某個成功除錯經驗，做出具體可信的承諾。",
+    questionId: "rev-stanley-4-first-90-180-days-success"
+  }
+];
 
 export const ReverseInterviewStudio: React.FC<ReverseInterviewStudioProps> = () => {
   // State for questions
@@ -56,11 +132,31 @@ export const ReverseInterviewStudio: React.FC<ReverseInterviewStudioProps> = () 
   const [bookmarkedIds, setBookmarkedIds] = useState<string[]>(() => {
     try {
       const saved = localStorage.getItem("stanley_reverse_bookmarks_v1");
-      return saved ? JSON.parse(saved) : ["rev-1-new-tech-goals", "rev-5-newcomer-success-factors", "rev-7-salary-structure-hr"];
+      return saved
+        ? JSON.parse(saved)
+        : [
+            "rev-stanley-1-sustainability-ppwr",
+            "rev-stanley-2-tools-ai-database",
+            "rev-stanley-3-cross-border-rfq-ownership",
+            "rev-stanley-4-first-90-180-days-success",
+            "rev-1-new-tech-goals",
+            "rev-7-salary-structure-hr"
+          ];
     } catch {
-      return ["rev-1-new-tech-goals", "rev-5-newcomer-success-factors", "rev-7-salary-structure-hr"];
+      return [
+        "rev-stanley-1-sustainability-ppwr",
+        "rev-stanley-2-tools-ai-database",
+        "rev-stanley-3-cross-border-rfq-ownership",
+        "rev-stanley-4-first-90-180-days-success",
+        "rev-1-new-tech-goals",
+        "rev-7-salary-structure-hr"
+      ];
     }
   });
+
+  // Active strategic dimension showcase tab
+  const [activeDimensionKey, setActiveDimensionKey] = useState<string>("sustainability");
+  const [dimensionFilter, setDimensionFilter] = useState<string>("all");
 
   // Filter states
   const [audienceFilter, setAudienceFilter] = useState<string>("all");
@@ -119,7 +215,9 @@ export const ReverseInterviewStudio: React.FC<ReverseInterviewStudioProps> = () 
     if (activeTab === "custom" && !isCustom) return false;
     if (activeTab === "bookmarked" && !isBookmarked) return false;
 
-    return matchAudience && matchDifficulty && matchSearch;
+    const matchDimension = dimensionFilter === "all" || q.dimension === dimensionFilter;
+
+    return matchAudience && matchDifficulty && matchSearch && matchDimension;
   });
 
   const handleCopy = (text: string, id: string) => {
@@ -227,10 +325,13 @@ export const ReverseInterviewStudio: React.FC<ReverseInterviewStudioProps> = () 
 
   // Quick preset chips for rapid question creation
   const presetChips = [
+    "重型手工具推行全紙化/無塑及因應 PPWR 法規時遇到的最大結構與成本挑戰？",
+    "團隊在打樣驗證時，AI/自動化工具的應用情況？是否計畫建立模組化結構資料庫？",
+    "台灣包裝團隊在 RFQ 初期與全球 R&D/PM 及亞洲供應商的協同模式與主導產品線？",
+    "入職前 3 到 6 個月內，主管期待優先協助解決的核心痛點？如何定義成功？",
+    "歐盟 PPWR 空隙率 50% 與 DfR 評級在團隊的落地現況",
     "部門對自動化折盒的規劃",
     "產線試產遇到交期延誤的處理機制",
-    "團隊在永續包材測試上的失敗容忍度",
-    "未來與北美總部的溝通頻率",
     "考績評核時最看重的量化指標",
   ];
 
@@ -297,6 +398,320 @@ export const ReverseInterviewStudio: React.FC<ReverseInterviewStudioProps> = () 
             </p>
           </div>
         </div>
+      </div>
+
+      {/* Stanley Black & Decker 4-Dimension High-Impact Reverse Interview Framework Showcase */}
+      <div className="bg-white rounded-2xl p-6 sm:p-7 border border-stone-200 shadow-sm space-y-6">
+        {/* Header */}
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 border-b border-stone-100 pb-5">
+          <div className="space-y-1.5">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="bg-amber-100 text-amber-900 border border-amber-300 text-xs font-bold px-2.5 py-0.5 rounded flex items-center gap-1.5">
+                <Sparkles className="w-3.5 h-3.5 text-amber-600" />
+                <span>4-DIMENSION STRATEGY MATRIX</span>
+              </span>
+              <span className="text-xs text-stone-500 font-mono">
+                史丹利七和面試尾聲必勝好牌
+              </span>
+            </div>
+            <h3 className="text-lg sm:text-xl font-bold text-stone-900 flex items-center gap-2">
+              <span>四大維度高級反提問策略看板</span>
+              <span className="text-xs font-normal text-stone-500 bg-stone-100 px-2 py-0.5 rounded-full">
+                專業深度 ✕ 商業思維 ✕ 即戰力接球
+              </span>
+            </h3>
+            <p className="text-xs sm:text-sm text-stone-600 max-w-3xl leading-relaxed">
+              當面試尾聲面試官詢問「你還有什麼問題想問我們嗎？」時，提出高質量反提問是拉開與其他候選人差距的決定性關鍵。針對史丹利七和（Stanley Black & Decker）的企業文化與包裝設計師角色，為你整理出四大維度的高級反提問策略與背後傳達的正面訊號：
+            </p>
+          </div>
+
+          <div className="flex items-center gap-2 self-start md:self-center shrink-0">
+            <button
+              onClick={() => {
+                const targetDim = STANLEY_STRATEGY_DIMENSIONS.find(
+                  (d) => d.key === activeDimensionKey
+                );
+                if (targetDim) {
+                  setNewTitle(targetDim.question.replace(/^「|」$/g, ""));
+                  setNewWhy(targetDim.signalSent);
+                  setNewAudience(
+                    targetDim.targetAudience.includes("HR") ? "人資 (HR)" : "用人主管"
+                  );
+                  setIsAddingNew(true);
+                }
+              }}
+              className="inline-flex items-center space-x-1.5 bg-stone-100 hover:bg-stone-200 text-stone-800 text-xs font-semibold px-3 py-2 rounded-xl transition-colors"
+            >
+              <Plus className="w-3.5 h-3.5" />
+              <span>以此題帶入編輯器自訂</span>
+            </button>
+          </div>
+        </div>
+
+        {/* 4 Dimension Selector Tabs / Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+          {STANLEY_STRATEGY_DIMENSIONS.map((dim) => {
+            const isActive = activeDimensionKey === dim.key;
+            const Icon = dim.icon;
+            const isBookmarked = bookmarkedIds.includes(dim.questionId);
+
+            return (
+              <button
+                key={dim.key}
+                type="button"
+                onClick={() => {
+                  setActiveDimensionKey(dim.key);
+                }}
+                className={`p-4 rounded-xl text-left transition-all border flex flex-col justify-between space-y-3 relative group ${
+                  isActive
+                    ? "bg-amber-50/70 border-amber-400 shadow-xs ring-1 ring-amber-400/50"
+                    : "bg-stone-50/70 hover:bg-stone-100/80 border-stone-200 text-stone-700"
+                }`}
+              >
+                <div className="space-y-1.5">
+                  <div className="flex items-center justify-between">
+                    <span
+                      className={`inline-flex items-center gap-1.5 text-xs font-bold px-2 py-0.5 rounded-md ${
+                        isActive
+                          ? "bg-amber-400 text-stone-950 font-black"
+                          : "bg-stone-200 text-stone-700"
+                      }`}
+                    >
+                      <Icon className="w-3.5 h-3.5" />
+                      <span>{dim.badge}</span>
+                    </span>
+
+                    {isBookmarked && (
+                      <BookmarkCheck className="w-3.5 h-3.5 text-amber-600 shrink-0" />
+                    )}
+                  </div>
+
+                  <h4 className="text-sm font-bold text-stone-900 pt-1">
+                    {dim.title}
+                  </h4>
+                  <p className="text-xs text-stone-500 leading-snug">
+                    {dim.subtitle}
+                  </p>
+                </div>
+
+                <div className="pt-2 border-t border-stone-200/60 flex items-center justify-between text-[11px]">
+                  <span className="text-stone-500 font-medium truncate max-w-[140px]">
+                    {dim.targetAudience}
+                  </span>
+                  <span
+                    className={`font-semibold ${
+                      isActive ? "text-amber-800" : "text-stone-400 group-hover:text-stone-600"
+                    }`}
+                  >
+                    查看詳情 →
+                  </span>
+                </div>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Selected Dimension In-Depth Details Box */}
+        {(() => {
+          const currentDim =
+            STANLEY_STRATEGY_DIMENSIONS.find((d) => d.key === activeDimensionKey) ||
+            STANLEY_STRATEGY_DIMENSIONS[0];
+          const isBookmarked = bookmarkedIds.includes(currentDim.questionId);
+
+          return (
+            <div className="bg-stone-50/90 rounded-2xl p-5 sm:p-6 border border-stone-200 space-y-5">
+              {/* Top Meta Bar */}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-stone-200 pb-4">
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="bg-stone-900 text-amber-300 text-xs font-bold px-2.5 py-1 rounded-lg flex items-center gap-1.5">
+                    <currentDim.icon className="w-3.5 h-3.5" />
+                    <span>{currentDim.title}</span>
+                  </span>
+                  <span className="text-xs text-stone-600 bg-white px-2.5 py-1 rounded-lg border border-stone-200 font-medium">
+                    對象：{currentDim.targetAudience}
+                  </span>
+                  <span className="text-xs text-stone-500 bg-white px-2.5 py-1 rounded-lg border border-stone-200 flex items-center gap-1">
+                    <Clock className="w-3 h-3 text-stone-400" />
+                    <span>{currentDim.recommendedTiming}</span>
+                  </span>
+                </div>
+
+                <div className="flex items-center space-x-2 shrink-0 self-end sm:self-auto">
+                  <button
+                    onClick={() => toggleBookmark(currentDim.questionId)}
+                    className={`inline-flex items-center space-x-1 text-xs font-semibold px-3 py-1.5 rounded-lg border transition-colors ${
+                      isBookmarked
+                        ? "bg-amber-100 border-amber-300 text-amber-900"
+                        : "bg-white hover:bg-stone-100 border-stone-300 text-stone-700"
+                    }`}
+                  >
+                    {isBookmarked ? (
+                      <>
+                        <BookmarkCheck className="w-3.5 h-3.5 text-amber-600" />
+                        <span>已在必問清單</span>
+                      </>
+                    ) : (
+                      <>
+                        <Bookmark className="w-3.5 h-3.5 text-stone-400" />
+                        <span>加入必問清單</span>
+                      </>
+                    )}
+                  </button>
+                  <button
+                    onClick={() => {
+                      setDimensionFilter(currentDim.key);
+                      const element = document.getElementById(currentDim.questionId);
+                      if (element) {
+                        element.scrollIntoView({ behavior: "smooth" });
+                      }
+                    }}
+                    className="inline-flex items-center space-x-1 text-xs font-semibold px-3 py-1.5 rounded-lg bg-white hover:bg-stone-100 border border-stone-300 text-stone-700 transition-colors"
+                  >
+                    <span>只篩選此維度</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Underlying Positive Signal Sent */}
+              <div className="bg-emerald-50/90 border border-emerald-200 rounded-xl p-4 flex items-start space-x-3 shadow-2xs">
+                <div className="p-1.5 bg-emerald-100 text-emerald-800 rounded-lg shrink-0 mt-0.5">
+                  <Sparkles className="w-4 h-4" />
+                </div>
+                <div className="space-y-1">
+                  <span className="text-xs font-black text-emerald-950 tracking-wide uppercase flex items-center gap-1.5">
+                    <span>背後傳達的正面訊號 (Underlying Positive Signal)</span>
+                  </span>
+                  <p className="text-xs sm:text-sm text-emerald-900 leading-relaxed font-sans font-medium">
+                    {currentDim.signalSent}
+                  </p>
+                </div>
+              </div>
+
+              {/* Chinese Core Question Best Phrasing */}
+              <div className="bg-white rounded-xl p-4 sm:p-5 border border-stone-200 space-y-3 shadow-2xs">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-bold text-stone-900 flex items-center space-x-1.5">
+                    <MessageSquareQuote className="w-4 h-4 text-amber-600" />
+                    <span>核心推薦發問話術（中文高情商版）</span>
+                  </span>
+                  <div className="flex items-center space-x-2">
+                    <button
+                      onClick={() => handleSpeak(currentDim.question, `${currentDim.key}-top-zh`, "zh-TW")}
+                      className="inline-flex items-center space-x-1 bg-stone-50 hover:bg-stone-100 text-stone-700 border border-stone-200 text-xs px-2.5 py-1 rounded-lg transition-colors"
+                    >
+                      {playingId === `${currentDim.key}-top-zh` ? (
+                        <>
+                          <VolumeX className="w-3.5 h-3.5 text-amber-600" />
+                          <span>停止</span>
+                        </>
+                      ) : (
+                        <>
+                          <Volume2 className="w-3.5 h-3.5 text-stone-500" />
+                          <span>朗讀</span>
+                        </>
+                      )}
+                    </button>
+                    <button
+                      onClick={() => handleCopy(currentDim.question, `${currentDim.key}-top-zh`)}
+                      className="inline-flex items-center space-x-1 bg-amber-400 hover:bg-amber-300 text-stone-950 text-xs font-bold px-3 py-1 rounded-lg transition-colors shadow-2xs"
+                    >
+                      {copiedId === `${currentDim.key}-top-zh` ? (
+                        <>
+                          <Check className="w-3.5 h-3.5" />
+                          <span>已複製</span>
+                        </>
+                      ) : (
+                        <>
+                          <Copy className="w-3.5 h-3.5" />
+                          <span>複製發問詞</span>
+                        </>
+                      )}
+                    </button>
+                  </div>
+                </div>
+
+                <p className="text-sm sm:text-base font-semibold text-stone-950 leading-relaxed font-sans bg-amber-50/30 p-3.5 rounded-xl border border-amber-200/60">
+                  {currentDim.question}
+                </p>
+              </div>
+
+              {/* Follow-up Pitch (接球金句) */}
+              <div className="bg-amber-50/70 border border-amber-300/80 rounded-xl p-4 sm:p-5 space-y-2.5 shadow-2xs">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-1.5 text-xs font-bold text-amber-950">
+                    <ArrowRight className="w-4 h-4 text-amber-700" />
+                    <span>面試官回答後的「接球金句 (Follow-up Pitch)」</span>
+                    <span className="text-[11px] font-normal text-amber-800 bg-amber-200/70 px-2 py-0.5 rounded-full hidden sm:inline">
+                      關鍵在於接球，證明自己是即戰力
+                    </span>
+                  </div>
+                  <button
+                    onClick={() => handleCopy(currentDim.followUpPitch, `${currentDim.key}-top-pitch`)}
+                    className="inline-flex items-center space-x-1 bg-white hover:bg-amber-100 text-amber-950 text-xs font-semibold px-2.5 py-1 rounded-lg border border-amber-300 transition-colors"
+                  >
+                    {copiedId === `${currentDim.key}-top-pitch` ? (
+                      <>
+                        <Check className="w-3 h-3 text-amber-700" />
+                        <span>已複製金句</span>
+                      </>
+                    ) : (
+                      <>
+                        <Copy className="w-3 h-3 text-amber-700" />
+                        <span>複製接球金句</span>
+                      </>
+                    )}
+                  </button>
+                </div>
+                <p className="text-xs sm:text-sm text-stone-900 leading-relaxed font-sans bg-white/90 p-3 rounded-lg border border-amber-200/60">
+                  {currentDim.followUpPitch}
+                </p>
+              </div>
+
+              {/* Grid: English Version & Pitfall Guardrails */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                {/* Professional English Pitch */}
+                <div className="bg-white rounded-xl p-4 border border-stone-200 space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold text-stone-800 flex items-center space-x-1.5">
+                      <Globe className="w-3.5 h-3.5 text-stone-500" />
+                      <span>外商專業英文版 (Professional English Pitch)</span>
+                    </span>
+                    <div className="flex items-center space-x-1.5">
+                      <button
+                        onClick={() => handleSpeak(currentDim.english, `${currentDim.key}-top-en`, "en-US")}
+                        className="p-1 text-stone-500 hover:text-stone-900 rounded hover:bg-stone-100 transition-colors"
+                        title="英文朗讀"
+                      >
+                        <Volume2 className="w-3.5 h-3.5" />
+                      </button>
+                      <button
+                        onClick={() => handleCopy(currentDim.english, `${currentDim.key}-top-en`)}
+                        className="p-1 text-stone-500 hover:text-stone-900 rounded hover:bg-stone-100 transition-colors"
+                        title="複製英文"
+                      >
+                        <Copy className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  </div>
+                  <p className="text-xs text-stone-800 font-mono leading-relaxed bg-stone-50 p-2.5 rounded-lg border border-stone-200">
+                    "{currentDim.english}"
+                  </p>
+                </div>
+
+                {/* Pitfall Guardrail */}
+                <div className="bg-white rounded-xl p-4 border border-stone-200 space-y-2">
+                  <span className="text-xs font-bold text-amber-900 flex items-center space-x-1.5">
+                    <AlertTriangle className="w-3.5 h-3.5 text-amber-600" />
+                    <span>提問避坑指南 (Pitfall Guardrails)</span>
+                  </span>
+                  <p className="text-xs text-stone-700 leading-relaxed font-sans bg-amber-50/40 p-2.5 rounded-lg border border-amber-200/50">
+                    {currentDim.pitfalls}
+                  </p>
+                </div>
+              </div>
+            </div>
+          );
+        })()}
       </div>
 
       {/* New Question Modal / Expansion Drawer */}
@@ -533,6 +948,42 @@ export const ReverseInterviewStudio: React.FC<ReverseInterviewStudioProps> = () 
           </div>
         </div>
 
+        {/* Dimension Quick Filter Row */}
+        <div className="flex flex-wrap items-center gap-1.5 pt-2 border-t border-stone-100 text-xs">
+          <span className="text-stone-500 text-[11px] font-medium mr-1 flex items-center gap-1">
+            <Layers className="w-3 h-3 text-stone-400" />
+            <span>四大維度：</span>
+          </span>
+          <button
+            onClick={() => setDimensionFilter("all")}
+            className={`px-2.5 py-1 rounded-md text-xs font-medium transition-colors ${
+              dimensionFilter === "all"
+                ? "bg-amber-400 text-stone-950 font-bold shadow-2xs"
+                : "bg-stone-100 text-stone-700 hover:bg-stone-200"
+            }`}
+          >
+            全部維度
+          </button>
+          {STANLEY_STRATEGY_DIMENSIONS.map((dim) => {
+            const isSelected = dimensionFilter === dim.key;
+            const Icon = dim.icon;
+            return (
+              <button
+                key={dim.key}
+                onClick={() => setDimensionFilter(isSelected ? "all" : dim.key)}
+                className={`px-2.5 py-1 rounded-md text-xs transition-colors flex items-center gap-1.5 ${
+                  isSelected
+                    ? "bg-stone-900 text-amber-300 font-bold shadow-2xs"
+                    : "bg-stone-50 hover:bg-stone-100 text-stone-700 border border-stone-200"
+                }`}
+              >
+                <Icon className="w-3 h-3 text-current" />
+                <span>{dim.badge}</span>
+              </button>
+            );
+          })}
+        </div>
+
         {/* Row 2: Secondary View Scope & Difficulty */}
         <div className="flex flex-wrap items-center justify-between gap-3 text-xs">
           <div className="flex flex-wrap items-center gap-1.5">
@@ -614,6 +1065,7 @@ export const ReverseInterviewStudio: React.FC<ReverseInterviewStudioProps> = () 
           return (
             <div
               key={q.id}
+              id={q.id}
               className={`bg-white border rounded-2xl p-5 sm:p-6 transition-all shadow-xs hover:shadow-sm ${
                 isBookmarked
                   ? "border-amber-300/80 bg-stone-50/40"
@@ -626,6 +1078,14 @@ export const ReverseInterviewStudio: React.FC<ReverseInterviewStudioProps> = () 
               <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3 border-b border-stone-100 pb-3">
                 <div className="space-y-1.5">
                   <div className="flex flex-wrap items-center gap-2">
+                    {/* Dimension Badge if available */}
+                    {q.dimensionLabel && (
+                      <span className="text-[11px] bg-emerald-50 text-emerald-900 font-bold px-2.5 py-0.5 rounded-md border border-emerald-200 flex items-center gap-1">
+                        <Sparkles className="w-3 h-3 text-emerald-600" />
+                        <span>{q.dimensionLabel}</span>
+                      </span>
+                    )}
+
                     {/* Target Audience Badge */}
                     <span
                       className={`text-[11px] font-semibold px-2.5 py-0.5 rounded-md flex items-center space-x-1.5 border ${
@@ -696,6 +1156,19 @@ export const ReverseInterviewStudio: React.FC<ReverseInterviewStudioProps> = () 
                   )}
                 </div>
               </div>
+
+              {/* Underlying Positive Signal if present */}
+              {q.signalSent && (
+                <div className="bg-emerald-50/80 border border-emerald-200/90 rounded-xl p-3 flex items-start space-x-2.5 my-3 shadow-2xs">
+                  <Sparkles className="w-4 h-4 text-emerald-700 shrink-0 mt-0.5" />
+                  <div className="text-xs text-emerald-950 leading-relaxed font-sans">
+                    <span className="font-bold text-emerald-900 mr-1.5 uppercase tracking-wide text-[11px]">
+                      背後傳達訊號：
+                    </span>
+                    <span>{q.signalSent}</span>
+                  </div>
+                </div>
+              )}
 
               {/* Strategic Insights Grid - Softer, balanced low contrast */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5 my-3.5">

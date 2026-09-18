@@ -352,7 +352,7 @@ export default function App() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-3">
           <div className="flex items-center space-x-2">
             <span className="w-2 h-2 rounded-full bg-amber-400" />
-            <span className="font-semibold text-white">Packaging Design Expert Interview Bank</span>
+            <span className="font-semibold text-white">Packaging Design</span>
             <span className="text-stone-500">|</span>
             <span>Structural Packaging Engineer Interview Simulator</span>
           </div>

@@ -57,7 +57,7 @@ export const Header: React.FC<HeaderProps> = ({
                 </span>
               </div>
               <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white mt-1">
-                Packaging Design Expert Interview Bank
+                Packaging Design
               </h1>
               <p className="text-xs sm:text-sm text-stone-300 mt-0.5">
                 Structural Packaging Engineer

@@ -126,6 +126,9 @@ export interface CustomReverseQuestion {
   pitfalls: string;
   createdAt: string;
   isCustom?: boolean;
+  dimension?: "sustainability" | "digital_tools" | "collaboration" | "role_expectations" | string;
+  dimensionLabel?: string;
+  signalSent?: string;
 }
 
 export interface ReverseQuestionAnalysis {

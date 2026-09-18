@@ -42,6 +42,11 @@ export const ExitScenarioGenerator: React.FC<ExitScenarioGeneratorProps> = ({
 
   // Common quick-tag presets
   const presetTags = [
+    "歐盟PPWR法規實踐",
+    "空隙率限制50%",
+    "DfR可回收評級A-C",
+    "附屬材料MSDS膠水管控",
+    "PFAS禁令與DoC檔案",
     "Maureen內部引薦",
     "聽Maureen說很開朗開心",
     "史丹利四大軟硬體拉力",
@@ -63,6 +68,10 @@ export const ExitScenarioGenerator: React.FC<ExitScenarioGeneratorProps> = ({
 
   // Quick preset template combinations
   const presetTemplates = [
+    {
+      label: "⭐ 歐盟 PPWR 法規合規實踐 (空隙率≤50%、DfR A-C評級、MSDS膠水管控、DoC)",
+      value: "歐盟PPWR法規實踐、空隙率限制50%、DfR可回收評級A-C、附屬材料MSDS膠水管控、PFAS禁令與DoC檔案"
+    },
     {
       label: "⭐ 離開久鼎與 Maureen 引薦 (為何想離開？之前為何沒投？四大軟硬體拉力)",
       value: "離開久鼎交流、聽Maureen說很開朗開心滿滿開心、外商文化品牌專注AI接受度、ArtiosCAD與割樣機快速驗證、當初久鼎適應期專案忙如今圓滿落地"
@@ -108,6 +117,7 @@ export const ExitScenarioGenerator: React.FC<ExitScenarioGeneratorProps> = ({
     // Detect specific business operational contexts
     const hasMaureenReferral = /maureen|引薦|推薦|久鼎|割樣機|artios|開朗|滿滿開心|四大拉力/i.test(rawKw);
     const hasMerryRehire = /美律|回任|回去|留停|陪家人|父親|爸爸|生病/i.test(rawKw);
+    const hasPPWR = /ppwr|歐盟|空隙率|dfr|pfas|可回收評級|void\s*space/i.test(rawKw);
     const hasOrderDecline = /接單|訂單|下滑|萎縮|不佳|減少/i.test(rawKw);
     const hasRestructure = /裁撤|裁員|整併|精簡|人事|縮編/i.test(rawKw);
     const hasTransition = /轉型|方向|策略|重心|調整/i.test(rawKw);
@@ -188,6 +198,45 @@ export const ExitScenarioGenerator: React.FC<ExitScenarioGeneratorProps> = ({
         redlineAvoided,
         interviewerPsychology:
           "外商用人主管與 HR 核心評估：主管問『若美律問你要不要回去，你會回去嗎？』通常有三大心理考量：① 測試跳槽穩定度與回任風險（會不會做沒多久又回老東家？）；② 確認家庭生活與身心狀態（留停照顧家人的狀況是否已穩定？是否能全心投入高強度專案？）；③ 驗證對史丹利的專一性（是否真心想投入手工具包裝，而非暫時落腳）。本回答完美做到了『明確表明完全不考慮回任』＋『說明生病留停陪家人、理解公司無法等待後和平離職』＋『證實生活工作平衡極佳、節奏良好精力充沛』＋『展現對史丹利重型五金全新舞台的強烈拉力』，徹底消除主管疑慮並強化錄取信任度！",
+        isAiEnhanced: false
+      };
+    }
+
+    if (hasPPWR) {
+      const opening =
+        "「在現職久鼎金屬服務期間，我非常感謝主管與團隊給予的高度信任與發揮空間，讓我有機會主導關鍵的自行車全紙化無塑包裝專案，並深研歐盟新版 PPWR 包裝與包裝廢棄物法規，不僅累積了 SolidWorks 3D 結構建模、ISTA 1A 國際落摔測試與無膠專利研發實戰，更建置了跨部門無塑包裝資料庫。」";
+
+      const pivot =
+        "「在深入推進歐盟 PPWR 合規實務的過程中，我深刻體會到新法規對結構工程師提出的嚴苛量化標準：從運輸與電商包裝空隙率強制不得超過 50%、非剛性緩衝材全數視同空隙，到 2030 年可回收性 DfR 必須衝上 Grade A 至 C（≥80% 准入門檻），並嚴格管控附屬材料 MSDS 水溶性散漿膠水、無碳黑 NIR 光學分揀油墨與 PFAS 禁令。這些法規指標若要真正產生規模化效益，必須依託在出貨量龐大、具備全球供應鏈規模且高度重視專利壁壘的國際品牌商舞台。然而在傳統代工或區域製造體系中，較難全面支撐歐盟最高標準的綠色結構深耕。」";
+
+      const closing =
+        "「Stanley Black & Decker 作為全球五金工具龍頭，歐洲市場更是集團核心戰略版圖，GSMA 亞洲營運中心更具備強大的研發樞紐動能。我期望能直接將我在 3D CAD 最小化空隙率計算、紙板幾何懸浮吸能、Mono-material 單一材質化，以及 DoC 5 年技術檔案建立上的實戰即戰力，投入在史丹利百得的全球工具產品矩陣中，協助團隊在 2030 PPWR 浪潮中搶先樹立世界級綠色合規標竿！」";
+
+      const fullScript = `${opening}\n\n${pivot}\n\n${closing}`;
+
+      const redlineAvoided = [
+        {
+          riskyWord: "批評前東家不重視歐盟法規、不想花錢開模",
+          safeReplacement: "轉化為「渴望依託全球百億級出貨量能，發揮 PPWR 極限結構優化與 DfR Grade A 的規模化價值」"
+        },
+        {
+          riskyWord: "以為塞滿氣泡布或紙絲就能混過防摔測試",
+          safeReplacement: "專業指出「PPWR 明訂非剛性緩衝材視同空隙，必須在 3D CAD 精算體積並靠幾何自鎖結構吸能」"
+        },
+        {
+          riskyWord: "只談泛泛的環保口號卻提不出具體合規門檻",
+          safeReplacement: "精準引用「空隙率 ≤50%、DfR Grade C ≥80% 准入門檻、MSDS 水溶性膠水與 5 年 DoC 技術檔案」展現大師級專業度！"
+        }
+      ];
+
+      return {
+        fullScript,
+        opening,
+        pivot,
+        closing,
+        redlineAvoided,
+        interviewerPsychology:
+          "外商用人主管與高層審核痛點：面試官最怕只會空談『環保愛地球』口號的候選人。這套回答展現了深水級的國際法規實戰力——精準掌握歐盟 PPWR 空隙率計算（非剛性填充材全算空隙）、DfR Grade A-C 回收評級、MSDS 水溶性散漿膠水與 5 年 DoC 技術檔案。用人主管能一眼看出候選人具備跨國品牌商的全球合規大局觀，能為史丹利百得防範鉅額歐盟退運與罰則風險！",
         isAiEnhanced: false
       };
     }
