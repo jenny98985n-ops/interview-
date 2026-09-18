@@ -520,7 +520,7 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
               <span>AI 面試官點評</span>
             </button>
 
-            {question.category === "exit_reason" && (
+            {(question.category === "exit_reason" || question.id === "q9-exit-reason-rescue" || question.id === "q41-why-leave-jiouding-maureen-referral-stanley-pull") && (
               <button
                 id={`tab-generator-${question.id}`}
                 onClick={() => setActiveSubTab("generator")}
@@ -539,8 +539,8 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
           {/* Sub-tab 1: Expert Answer */}
           {activeSubTab === "answer" && (
             <div className="space-y-4">
-              {/* Exit Scenario Generator Shortcut Banner for exit_reason questions */}
-              {question.category === "exit_reason" && (
+              {/* Exit Scenario Generator Shortcut Banner for exit_reason / Q09 / Q41 questions */}
+              {(question.category === "exit_reason" || question.id === "q9-exit-reason-rescue" || question.id === "q41-why-leave-jiouding-maureen-referral-stanley-pull") && (
                 <div className="bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-300/80 rounded-xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-xs">
                   <div className="flex items-start space-x-3">
                     <div className="p-2 bg-amber-400 text-stone-950 rounded-lg shrink-0 mt-0.5">
@@ -548,10 +548,14 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
                     </div>
                     <div>
                       <h4 className="text-sm sm:text-base font-bold text-stone-900">
-                        想針對目前公司的具體狀況客製話術？使用「情境生成器」
+                        {question.id === "q41-why-leave-jiouding-maureen-referral-stanley-pull"
+                          ? "想客製「離開久鼎動機、Maureen內部推薦與四大軟硬體拉力」精準話術？"
+                          : "想針對美律離職、回任追問或目前公司狀況客製話術？使用「情境生成器」"}
                       </h4>
                       <p className="text-xs sm:text-sm text-stone-600 mt-0.5 leading-relaxed">
-                        支援輸入如「接單狀況下滑」、「組織裁撤」、「轉型期」等關鍵詞，自動產生客觀、積極且專注個人發展的說明草稿！
+                        {question.id === "q41-why-leave-jiouding-maureen-referral-stanley-pull"
+                          ? "一鍵切換久鼎轉職、Maureen開朗感染力、ArtiosCAD 2D/3D虛擬驗證與割樣機快速迭代話術！"
+                          : "支援輸入如「美律留停陪家人、生活工作平衡」、「接單狀況下滑」、「組織裁撤」、「轉型期」等關鍵詞，自動產生客觀、積極且專注個人發展的說明草稿！"}
                       </p>
                     </div>
                   </div>
@@ -1214,10 +1218,14 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
           )}
 
           {/* Sub-tab 7: Exit Scenario Generator */}
-          {activeSubTab === "generator" && question.category === "exit_reason" && (
+          {activeSubTab === "generator" && (question.category === "exit_reason" || question.id === "q9-exit-reason-rescue" || question.id === "q41-why-leave-jiouding-maureen-referral-stanley-pull") && (
             <div className="space-y-4">
               <ExitScenarioGenerator
-                defaultKeywords="接單狀況下滑、組織裁撤、轉型期"
+                defaultKeywords={
+                  question.id === "q41-why-leave-jiouding-maureen-referral-stanley-pull"
+                    ? "離開久鼎交流、聽Maureen說很開朗開心滿滿開心、外商文化品牌專注AI接受度、ArtiosCAD與割樣機快速驗證、當初久鼎適應期專案忙如今圓滿落地"
+                    : "美律留停後陪家人、生活工作平衡良好、暫不考慮回任、渴望史丹利全新挑戰"
+                }
                 currentNotes={userDraft}
                 onSaveToNotes={(notes) => {
                   onUpdateState(question.id, { notes });
